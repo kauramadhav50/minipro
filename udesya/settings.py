@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-q9iz4$aio_rht7#)8ed)&(_=$e*h=32-bk3j_p9e6cu@e(o66_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://minipro-519d.onrender.com/', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -57,6 +57,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://minipro-519d.onrender.com/"
+]
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 CORS_ALLOW_ALL_ORIGINS = True
 
