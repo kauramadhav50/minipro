@@ -35,13 +35,22 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.CharField(source="author.username", read_only=True)
     author_fullname = serializers.CharField(source="author.fullname", read_only=True)
-    
+
     profile_pic = serializers.SerializerMethodField()
-    image = serializers.SerializerMethodField()  # 👈 ADD THIS
+    image_url = serializers.SerializerMethodField()  # ✅ NEW FIELD
 
     class Meta:
         model = Post
-        fields = ["id", "author", "author_fullname", "content", "image", "created_at", "profile_pic"]
+        fields = [
+            "id",
+            "author",
+            "author_fullname",
+            "content",
+            "image",        # ✅ KEEP THIS (for upload)
+            "image_url",    # ✅ ADD THIS (for display)
+            "created_at",
+            "profile_pic"
+        ]
 
     def get_profile_pic(self, obj):
         request = self.context.get('request')
@@ -50,7 +59,7 @@ class PostSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(url) if request else url
         return None
 
-    def get_image(self, obj):   # 👈 ADD THIS METHOD
+    def get_image_url(self, obj):
         request = self.context.get('request')
         if obj.image:
             url = obj.image.url
