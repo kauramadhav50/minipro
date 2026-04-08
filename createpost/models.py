@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from cloudinary.models import CloudinaryField
 
 class User(AbstractUser):
     # Built-in fields already included: username, email, password, is_staff, is_active
@@ -7,7 +8,7 @@ class User(AbstractUser):
     # Custom LinkedIn-style fields
     fullname = models.CharField(max_length=255, blank=True)
     bio = models.TextField(max_length=500, blank=True)
-    profile_pic = models.ImageField(upload_to='profile_pics/', default='default.jpg', blank=True, null=True)
+    profile_pic = CloudinaryField('profile_pics', blank=True, null=True)
 
     # Use email as a required field for LinkedIn-style login (optional)
     email = models.EmailField(unique=True)
@@ -19,7 +20,7 @@ class User(AbstractUser):
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     content = models.TextField()
-    image = models.ImageField(upload_to='post_images/', blank=True, null=True)
+    image = CloudinaryField('post_images', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
