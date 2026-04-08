@@ -89,6 +89,17 @@ class PostSerializer(serializers.ModelSerializer):
 #         return user
 
 
+# class RegisterSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['username', 'fullname', 'email', 'password', 'bio', 'profile_pic']
+#         extra_kwargs = {
+#             'password': {'write_only': True}
+#         }
+
+#     def create(self, validated_data):
+#         return User.objects.create_user(**validated_data)
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -98,7 +109,19 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        profile_pic = validated_data.pop('profile_pic', None)
+
+        # create user first
+        user = User.objects.create_user(**validated_data)
+
+        # assign image separately
+        if profile_pic:
+            user.profile_pic = profile_pic
+            user.save()
+
+        return user
+
+
 
 
 
