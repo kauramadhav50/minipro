@@ -32,12 +32,46 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 #         return None
 
 
+# class PostSerializer(serializers.ModelSerializer):
+#     author = serializers.CharField(source="author.username", read_only=True)
+#     author_fullname = serializers.CharField(source="author.fullname", read_only=True)
+
+#     profile_pic = serializers.SerializerMethodField()
+#     image_url = serializers.SerializerMethodField()  # ✅ NEW FIELD
+
+#     class Meta:
+#         model = Post
+#         fields = [
+#             "id",
+#             "author",
+#             "author_fullname",
+#             "content",
+#             "image",        # ✅ KEEP THIS (for upload)
+#             "image_url",    # ✅ ADD THIS (for display)
+#             "created_at",
+#             "profile_pic"
+#         ]
+
+#     def get_profile_pic(self, obj):
+#         request = self.context.get('request')
+#         if obj.author.profile_pic:
+#             url = obj.author.profile_pic.url
+#             return request.build_absolute_uri(url) if request else url
+#         return None
+
+#     def get_image_url(self, obj):
+#         request = self.context.get('request')
+#         if obj.image:
+#             url = obj.image.url
+#             return request.build_absolute_uri(url) if request else url
+#         return None
+
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.CharField(source="author.username", read_only=True)
     author_fullname = serializers.CharField(source="author.fullname", read_only=True)
 
     profile_pic = serializers.SerializerMethodField()
-    image_url = serializers.SerializerMethodField()  # ✅ NEW FIELD
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -46,8 +80,8 @@ class PostSerializer(serializers.ModelSerializer):
             "author",
             "author_fullname",
             "content",
-            "image",        # ✅ KEEP THIS (for upload)
-            "image_url",    # ✅ ADD THIS (for display)
+            "image",
+            "image_url",
             "created_at",
             "profile_pic"
         ]
@@ -65,6 +99,18 @@ class PostSerializer(serializers.ModelSerializer):
             url = obj.image.url
             return request.build_absolute_uri(url) if request else url
         return None
+
+    def update(self, instance, validated_data):
+        image = validated_data.pop('image', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if image:
+            instance.image = image
+
+        instance.save()
+        return instance
 
 
 
