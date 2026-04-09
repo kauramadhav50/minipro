@@ -106,6 +106,61 @@ DATABASES = {
 }
 
 
+# os.environ.setdefault("PGDATABASE", "postgres")
+# os.environ.setdefault("PGUSER", "postgres")
+# os.environ.setdefault("PGPASSWORD", "Ma2@dhav1980")
+# os.environ.setdefault("PGHOST", "wcetlwnvmwhjkzjeedje.supabase.co")
+# os.environ.setdefault("PGPORT", "5432")
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ["PGDATABASE"],
+#         'USER': os.environ["PGUSER"],
+#         'PASSWORD': os.environ["PGPASSWORD"],
+#         'HOST': os.environ["PGHOST"],
+#         'PORT': os.environ["PGPORT"],
+#         'OPTIONS': {
+#             'sslmode': 'require',
+#         },
+#     }
+# }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Ma2@dhav1980',
+#         'HOST': 'wcetlwnvmwhjkzjeedje.supabase.co',
+#         'PORT': '5432',
+#     }
+# }
+
+import dj_database_url
+import os
+
+# DATABASES = {
+#     'default': dj_database_url.parse(
+#         os.getenv("DATABASE_URL")
+#     )
+# }
+
+from decouple import config
+
+
+DATABASES['default'] = dj_database_url.parse(config('DATABASE_URL'))
+
+
+
+
+# from dotenv import load_dotenv
+# load_dotenv()
+
+
+
+
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
