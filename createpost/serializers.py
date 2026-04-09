@@ -101,6 +101,8 @@ class PostSerializer(serializers.ModelSerializer):
         return None
 
     def update(self, instance, validated_data):
+        print("UPDATE CALLED:", validated_data)  # 👈 ADD THIS
+
         image = validated_data.pop('image', None)
 
         for attr, value in validated_data.items():
@@ -166,6 +168,19 @@ class RegisterSerializer(serializers.ModelSerializer):
             user.save()
 
         return user
+    
+    def update(self, instance, validated_data):
+        profile_pic = validated_data.pop('profile_pic', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        # only update image if new one is provided
+        if profile_pic:
+            instance.profile_pic = profile_pic
+
+        instance.save()
+        return instance
 
 
 
